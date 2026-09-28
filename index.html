@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelo de Horario - Educación Tecnológica VII</title>
+<style>
+    :root {
+        --bg-color: #9d7d4d3c; /* Color de fondo crema-grisáceo muy claro */
+        --text-color: #1a1a1a; /* Color de texto oscuro para todo */
+        --pill-grey: #e8e6e6; /* Color para las pastillas de día y hora */
+
+        /* --- TUS COLORES PERSONALIZADOS --- */
+        --color-course-gestion-liderazgo: #3df24094;
+        --color-course-practica-pedagogica: #fca77697;
+        --color-course-evaluacion-aprendizaje: #3ae5e8;
+        --color-course-taller-proyectos: #8436d255;
+        --color-course-informatica-aplicada: #2235e4aa;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 60px 40px;
+    }
+
+    h1 {
+        font-size: 32px;
+        font-weight: 300;
+        margin-bottom: 60px;
+        text-align: center;
+    }
+
+    /* --- DISEÑO DE ESCRITORIO --- */
+    .schedule-grid {
+        display: grid;
+        grid-template-columns: auto repeat(5, minmax(200px, 1fr));
+        grid-template-rows: 60px repeat(6, minmax(100px, auto));
+        gap: 20px 30px; 
+        width: 100%;
+        max-width: 1500px;
+    }
+
+    .day-header, .time-header {
+        background-color: var(--pill-grey);
+        border-radius: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        box-shadow: 2px 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .day-header {
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .time-header {
+        grid-column: 1;
+        font-size: 15px;
+        font-weight: 400;
+        padding: 10px 25px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .class-block {
+        border-radius: 35px;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 15px;
+        line-height: 1.4;
+        box-shadow: 3px 3px 8px rgba(0,0,0,0.07);
+    }
+
+    .class-block .professor {
+        font-weight: 300;
+        margin-top: 5px;
+        font-size: 13px;
+    }
+    
+    /* Ocultar etiquetas de hora en escritorio */
+    .mobile-time {
+        display: none; 
+    }
+
+    /* Asignación de colores */
+    .course-gestion-liderazgo { background-color: var(--color-course-gestion-liderazgo); }
+    .course-practica-pedagogica { background-color: var(--color-course-practica-pedagogica); }
+    .course-evaluacion-aprendizaje { background-color: var(--color-course-evaluacion-aprendizaje); }
+    .course-taller-proyectos { background-color: var(--color-course-taller-proyectos); }
+    .course-informatica-aplicada { background-color: var(--color-course-informatica-aplicada); }
+
+    .class-block.course-informatica-aplicada, .class-block.course-informatica-aplicada span.professor {
+        color: #ffffff;
+    }
+
+    .placeholder-pill {
+        background-color: var(--pill-grey);
+        border-radius: 40px;
+        box-shadow: 2px 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* --- DISEÑO MÓVIL RESPONSIVO --- */
+    @media (max-width: 850px) {
+        body {
+            padding: 30px 15px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .schedule-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .class-block, .day-header {
+            order: var(--mob-order);
+            width: 100%;
+        }
+
+        /* Ocultar elementos innecesarios en móvil */
+        .time-header, .placeholder-pill {
+            display: none; 
+        }
+
+        .day-header {
+            padding: 15px 0;
+            margin-top: 25px; 
+            font-size: 18px;
+        }
+        
+        .day-header[style*="--mob-order: 10;"] {
+            margin-top: 0; 
+        }
+
+        .class-block {
+            padding: 20px 15px;
+            border-radius: 25px;
+        }
+
+        /* Mostrar etiqueta de hora en tarjetas */
+        .mobile-time {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .course-informatica-aplicada .mobile-time {
+            background-color: rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+        }
+    }
+
+</style>
+</head>
+<body>
+
+    <h1>(Horario - Educación Tecnológica VII - Ciclo)</h1>
+
+    <div class="schedule-grid">
+        <!-- Encabezados con order para apilar en móvil -->
+        <div class="day-header" style="grid-column: 2; grid-row: 1; --mob-order: 10;">LUNES</div>
+        <div class="day-header" style="grid-column: 3; grid-row: 1; --mob-order: 20;">MARTES</div>
+        <div class="day-header" style="grid-column: 4; grid-row: 1; --mob-order: 30;">MIÉRCOLES</div>
+        <div class="day-header" style="grid-column: 5; grid-row: 1; --mob-order: 40;">JUEVES</div>
+        <div class="day-header" style="grid-column: 6; grid-row: 1; --mob-order: 50;">VIERNES</div>
+
+        <!-- Horas (se ocultan en móvil) -->
+        <div class="time-header" style="grid-row: 2;">06:00 -<br>06:50</div>
+        <div class="time-header" style="grid-row: 3;">06:50 -<br>07:40</div>
+        <div class="time-header" style="grid-row: 4;">07:40 -<br>08:30</div>
+        <div class="time-header" style="grid-row: 5;">08:30 -<br>09:20</div>
+        <div class="time-header" style="grid-row: 6;">09:20 -<br>10:10</div>
+        <div class="time-header" style="grid-row: 7;">10:10 -<br>11:00</div>
+
+        <!-- Lunes -->
+        <div class="class-block course-gestion-liderazgo" style="grid-row: 2 / span 2; grid-column: 2; --mob-order: 11;">
+            <span class="mobile-time">06:00 - 07:40</span>
+            <div>Gestión y Liderazgo<br>en las II.EE. - Teoría<br><span class="professor">(Mg. Marcos Alberto Vásquez V.)</span></div>
+        </div>
+        <!-- Taller ocupa 3 bloques de hora (07:40 a 10:10) -->
+        <div class="class-block course-taller-proyectos" style="grid-row: 4 / span 3; grid-column: 2; --mob-order: 12;">
+            <span class="mobile-time">07:40 - 10:10</span>
+            <div>Taller de Elaboración<br>de Proyectos de<br>Investigación - Teoría<br><span class="professor">(Dr. Guido Ayay Arista)</span></div>
+        </div>
+        <div class="placeholder-pill" style="grid-row: 7; grid-column: 2;"></div>
+
+        <!-- Martes -->
+        <div class="class-block course-practica-pedagogica" style="grid-row: 2 / span 2; grid-column: 3; --mob-order: 21;">
+            <span class="mobile-time">06:00 - 07:40</span>
+            <div>Práctica Pedagógica y<br>Tecnológica I - Teoría<br><span class="professor">(Dra. Elizabeth Norma Calixto A.)</span></div>
+        </div>
+        <div class="class-block course-gestion-liderazgo" style="grid-row: 4 / span 2; grid-column: 3; --mob-order: 22;">
+            <span class="mobile-time">07:40 - 09:20</span>
+            <div>Gestión y Liderazgo<br>en las II.EE. - Práctica<br><span class="professor">(Mg. Marcos Alberto Vásquez V.)</span></div>
+        </div>
+        <div class="class-block course-informatica-aplicada" style="grid-row: 6 / span 2; grid-column: 3; --mob-order: 23;">
+            <span class="mobile-time">09:20 - 11:00</span>
+            <div>Informática Aplicada a la<br>Tecnología Educativa - Teoría<br><span class="professor">(Mg. Angelo Guerrero Garcia)</span></div>
+        </div>
+
+        <!-- Miércoles -->
+        <div class="class-block course-evaluacion-aprendizaje" style="grid-row: 2 / span 2; grid-column: 4; --mob-order: 31;">
+            <span class="mobile-time">06:00 - 07:40</span>
+            <div>Evaluación del Aprendizaje en<br>Educación Tecnológica - Teoría<br><span class="professor">(Mg. Betty Manzano Cahuana)</span></div>
+        </div>
+        <div class="placeholder-pill" style="grid-row: 4 / span 2; grid-column: 4;"></div>
+        <div class="class-block course-taller-proyectos" style="grid-row: 6 / span 2; grid-column: 4; --mob-order: 32;">
+            <span class="mobile-time">09:20 - 11:00</span>
+            <div>Taller de Elaboración<br>de Proyectos de<br>Investigación - Práctica<br><span class="professor">(Dr. Guido Ayay Arista)</span></div>
+        </div>
+
+        <!-- Jueves -->
+        <div class="class-block course-evaluacion-aprendizaje" style="grid-row: 2 / span 2; grid-column: 5; --mob-order: 41;">
+            <span class="mobile-time">06:00 - 07:40</span>
+            <div>Evaluación del Aprendizaje en<br>Educación Tecnológica - Práctica<br><span class="professor">(Mg. Betty Manzano Cahuana)</span></div>
+        </div>
+        <div class="class-block course-practica-pedagogica" style="grid-row: 4 / span 4; grid-column: 5; --mob-order: 42;">
+            <span class="mobile-time">07:40 - 11:00</span>
+            <div>Práctica Pedagógica y<br>Tecnológica I - Práctica<br><span class="professor">(Dra. Elizabeth Norma Calixto A.)</span></div>
+        </div>
+
+        <!-- Viernes -->
+        <div class="class-block course-informatica-aplicada" style="grid-row: 2 / span 2; grid-column: 6; --mob-order: 51;">
+            <span class="mobile-time">06:00 - 07:40</span>
+            <div>Informática Aplicada a la<br>Tecnología Educativa - Práctica<br><span class="professor">(Mg. Angelo Guerrero Garcia)</span></div>
+        </div>
+        <!-- Bloque vacío restante del viernes -->
+        <div class="placeholder-pill" style="grid-row: 4 / span 4; grid-column: 6;"></div>
+
+    </div>
+
+</body>
+</html>
